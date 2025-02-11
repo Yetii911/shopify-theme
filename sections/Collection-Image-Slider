@@ -1,0 +1,305 @@
+<!-- HTML Structure -->
+<div class="card-loop-container" id="cardLoopContainer">
+  <button class="nav-btn nav-btn-left" id="navLeftBtn">&#8592;</button>
+  {% assign num_cards = section.blocks.size %}
+  {% for block in section.blocks %}
+    <div class = hey>
+          <div class="card-item {% if forloop.first %}active-card{% elsif forloop.index == 2 %}next-card{% elsif forloop.index == 3 %}next-next-card{% elsif forloop.index == 4 %}prev-card{% elsif forloop.index == 5 %}prev-prev-card{% endif %}">
+      <div class="img-parent">
+        <a href="{{ block.settings.img_link }}" class="link">
+          <img src="{{ block.settings.card_image | img_url: '800x' }}" alt="Card Image" class="card-image">
+        </a>
+      </div>
+      <div class="card-content-wrapper">
+        <h3>{{ block.settings.card_title }}</h3>
+        <p>{{ block.settings.card_description }}</p>
+      </div>
+    </div>
+    </div>
+  {% endfor %}
+  <button class="nav-btn nav-btn-right" id="navRightBtn">&#8594;</button>
+</div>
+
+<!-- CSS Styles -->
+<style>
+  /* Scrollable Card Styles */
+  .card-loop-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      height: 550px;
+      overflow: hidden;
+      width: 100%;
+  }
+
+.card-loop-container .card-item {
+    width: 80%;
+    max-width: 300px;
+    height: 450px;
+    position: absolute;
+    transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
+    /* background: linear-gradient(135deg, #ffcc00, #ff6600); */
+    display: flex;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    box-shadow: 0 5px 6px rgba(0, 0, 0, 0.1);
+    opacity: 0.5;
+    transform: scale(0.8) translateX(0);
+    border-radius: 20px;
+}
+  a.link {
+    height: 100%;
+}
+  .card-loop-container .card-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 20px;
+  }
+  
+ .card-loop-container .card-content-wrapper {
+    position: absolute;
+    bottom: 30px;
+    text-align: center;
+    color: white;
+    z-index: 2;
+  }
+  
+  .img-parent {
+    border-radius: 20px;
+  }
+
+  .card-item.active-card {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+    margin-bottom: -130px;
+  }
+
+ .card-loop-container .card-item.prev-card {
+    transform: scale(0.8) translateX(-355px);
+    clip-path: polygon(0% 0%, 100% 10%, 100% 90%, 0% 100%, 0% 0%);
+    margin-bottom: 100px;
+  }
+
+ .card-loop-container .card-item.next-card {
+    transform: scale(0.8) translateX(362px);
+    clip-path: polygon(0% 10%, 100% 0%, 100% 100%, 0% 90%, 0% 0%);
+    margin-bottom: 100px;
+  }
+
+ .card-loop-container .card-item.prev-prev-card {
+    transform: scale(0.7) translateX(-753px);
+    clip-path: polygon(0% 0%, 100% 10%, 100% 90%, 0% 100%, 0% 0%);
+    margin-bottom: 100px;
+  }
+
+ .card-loop-container .card-item.next-next-card {
+    transform: scale(0.7) translateX(759px);
+    clip-path: polygon(0% 10%, 100% 0%, 100% 100%, 0% 90%, 0% 0%);
+    margin-bottom: 70px;
+  }
+
+  /* Styles for slider navigation buttons */
+ .card-loop-container .nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: 0.3s;
+    z-index: 10;
+  }
+  .hey {
+    height: 100%;
+    justify-content: center;
+    display: flex;
+    padding: 30px 0px;
+}
+
+ .card-loop-container .nav-btn:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+
+ .card-loop-container .nav-btn-left {
+    left: 10px;
+  }
+
+ .card-loop-container .nav-btn-right {
+    right: 10px;
+  }
+
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+   .card-loop-container .card-loop-container {
+      height: 300px; /* Adjust height for smaller screens */
+    }
+
+  .card-loop-container  .card-item {
+      width: 90%; /* Increase width for smaller screens */
+      max-width: 250px;
+      height: 300px; /* Reduce card height */
+    }
+
+   .card-loop-container .nav-btn {
+      font-size: 16px;
+      padding: 10px;
+    }
+
+   .card-loop-container .card-content-wrapper h3 {
+      font-size: 18px;
+    }
+
+  .card-loop-container  .card-content-wrapper p {
+      font-size: 14px;
+    }
+  }
+
+  @media (max-width: 480px) {
+   .card-loop-container .card-loop-container {
+      height: 250px; /* Further reduce height for very small screens */
+    }
+
+   .card-loop-container .card-item {
+      width: 95%;
+      max-width: 220px;
+      height: 250px;
+    }
+
+  .card-loop-container  .nav-btn {
+      font-size: 14px;
+      padding: 8px;
+    }
+
+   .card-loop-container .card-content-wrapper h3 {
+      font-size: 16px;
+    }
+
+   .card-loop-container .card-content-wrapper p {
+      font-size: 12px;
+    }
+  }
+</style>
+
+<!-- JavaScript -->
+<script>
+  let currentIndex = 0;
+  const cards = document.querySelectorAll('.card-item');
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  function updateCards() {
+    cards.forEach((card, index) => {
+      card.classList.remove('active-card', 'prev-card', 'next-card', 'prev-prev-card', 'next-next-card');
+      if (index === currentIndex) {
+        card.classList.add('active-card');
+      } else if (index === (currentIndex - 1 + cards.length) % cards.length) {
+        card.classList.add('prev-card');
+      } else if (index === (currentIndex + 1) % cards.length) {
+        card.classList.add('next-card');
+      } else if (index === (currentIndex - 2 + cards.length) % cards.length) {
+        card.classList.add('prev-prev-card');
+      } else {
+        card.classList.add('next-next-card');
+      }
+    });
+  }
+
+  document.getElementById('navLeftBtn').addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+    updateCards();
+  });
+
+  document.getElementById('navRightBtn').addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % cards.length;
+    updateCards();
+  });
+
+  // Touch events for swipe functionality
+  function handleTouchStart(e) {
+    touchStartX = e.touches[0].clientX;
+  }
+
+  function handleTouchEnd(e) {
+    touchEndX = e.changedTouches[0].clientX;
+    if (touchStartX - touchEndX > 50) {
+      // Swiped left
+      currentIndex = (currentIndex + 1) % cards.length;
+    } else if (touchEndX - touchStartX > 50) {
+      // Swiped right
+      currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+    }
+    updateCards();
+  }
+
+  // // Add touch event listeners to the card container
+  // const cardContainer = document.getElementById('cardLoopContainer');
+  // cardContainer.addEventListener('touchstart', handleTouchStart);
+  // cardContainer.addEventListener('touchend', handleTouchEnd);
+
+  // // Handle touchpad gestures
+  // cardContainer.addEventListener('wheel', (e) => {
+  //   if (e.deltaY > 0) {
+  //     currentIndex = (currentIndex + 1) % cards.length;  // Scrolling down (right swipe)
+  //   } else {
+  //     currentIndex = (currentIndex - 1 + cards.length) % cards.length;  // Scrolling up (left swipe)
+  //   }
+  //   updateCards();
+  // });
+
+  // updateCards();
+</script>
+
+<!-- Section Schema for Shopify Customization -->
+{% schema %}
+{
+  "name": "Scrollable Card Loop",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "label": "Card Image",
+          "id": "card_image",
+          "info": "Upload an image for the card."
+        },
+        {
+          "type": "text",
+          "label": "Card Title",
+          "id": "card_title",
+          "default": "Card Title",
+          "info": "Enter the title for the card."
+        },
+        {
+          "type": "textarea",
+          "label": "Card Description",
+          "id": "card_description",
+          "default": "Card Description",
+          "info": "Enter a description for the card."
+        },
+        {
+          "type": "url",
+          "id": "img_link",
+          "label": "Img Link",
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "custom-circle-slider",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
